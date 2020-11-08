@@ -5,7 +5,7 @@
 
 ![](https://erlangenwladimir.files.wordpress.com/2015/05/matrjoschka-3.jpg)
 
-Basic package to define a recursive rendering API.
+Lightweight package to define a recursive rendering API.
 The general idea is, you have a set of objects, you have a package that can draw objects.
 Now, you'll call render until you find objects that the drawing package can draw.
 
@@ -62,3 +62,46 @@ render(gl, particles(rand(10)))
 
 Now the real fun begins, when we insert extra context/layers to transform our objects into something renderable.
 E.g. we could define a Plotting context, that inserts extra objects like an axes, conversions, and styles into it!
+
+
+```julia
+
+struct Scatter
+end
+
+struct Shader
+end
+
+struct GLRenderable
+end
+
+function render(x::Scatter)
+    return Shader(x...)
+end
+
+function render(x::Scatter)
+    return Shader(x...)
+end
+
+function render(x::Shader)
+    # do opengl rendering!
+    return nothing
+end
+
+function render(screen::GLBackend, x::Any)
+
+end
+
+function display(x)
+    s = Scene()
+    plot_transform = render(current_scene[], x)
+    backend_transform = render(current_backend[], plot_transform)
+    return render(current_window[], backend_transform)
+end
+
+
+GridLayout(
+    Scene(pixelarea=Rect(0,0, 100, 100), camera=campixel!, scatter(rand(4))),
+    vbox(legend(heatmap(rand(4, 4))), bars(rand(4))),
+    volume(vol)
+)
